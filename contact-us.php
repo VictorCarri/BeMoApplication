@@ -140,13 +140,13 @@
 <form action="./mailer.php" method="post" enctype="multipart/form-data">
 	 <div>
 		<label>Name:</label> *<br />
-		<input class="form-input-field" type="text" value="" name="form[element0]" size="40"/><br /><br />
+		<input class="form-input-field" type="text" value="" name="senderName" size="40"/><br /><br />
 
 		<label>Email Address:</label> *<br />
-		<input class="form-input-field" type="text" value="" name="form[element1]" size="40"/><br /><br />
+		<input class="form-input-field" type="text" value="" name="senderAddr" size="40"/><br /><br />
 
 		<label>How can we help you?</label> *<br />
-		<textarea class="form-input-field" name="form[element2]" rows="8" cols="38"></textarea><br /><br />
+		<textarea class="form-input-field" name="message" rows="8" cols="38"></textarea><br /><br />
 
 		<div style="display: none;">
 			<label>Spam Protection: Please don't fill this in:</label>
