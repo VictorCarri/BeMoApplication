@@ -65,7 +65,7 @@
 			<header class="navbar navbar-default navbar-inverse navbar-fixed-top" role="navigation">
 			<div id="headwrap">
 					<div id="titlelogo">
-						<a href="./index.html">
+						<a href="./index.php">
 						<div id="logo">
 							<img src="./img/bemo-logo2.png" width="167" height="100" alt="Site logo"/></div>	
 							<h1></h1></a>
@@ -84,7 +84,7 @@
 							<div id="menuBtn"></div>
 							<nav>
 								<ul class="navigation">
-									<li><a href="index.html" rel="self">Main</a></li>
+									<li><a href="index.php" rel="self">Main</a></li>
 									<li id="current"><a href="contact-us.php" rel="self" id="current">Contact Us</a></li>
 								</ul>
 							</nav>	
