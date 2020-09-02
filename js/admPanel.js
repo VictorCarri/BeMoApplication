@@ -57,7 +57,7 @@ $(document).ready(function(e)
 			}
 		);
 
-		$("button").click(function(e)
+		$("button.pageInfo").click(function(e)
 			{
 				e.preventDefault();
 				const url = $(this).attr("data-url");
@@ -75,6 +75,48 @@ $(document).ready(function(e)
 					function(resp)
 					{
 						console.log(resp);
+					
+						if (resp.hasOwnProperty("failure")) // Failure
+						{
+							alert(resp.failure);
+						}
+
+						else
+						{
+							alert("Successfully updated page info");
+						}
+					}
+				);
+			}
+		);
+
+		$(".updateAnalytics").click(function(e)
+			{
+				const services = {
+					ga: "Google Analytics",
+					fb: "Facebook Pixel"
+				};
+				const service = services[$(this).attr("id")];
+				console.log("Selected service: %s", service);
+				$.post(
+					"./index.php",
+					{
+						service: service,
+						code: $("textarea[data-for=\"" + $(this).attr("id") + "\"]").val()
+					},
+					function(resp)
+					{
+						console.log(resp);
+
+						if (resp.hasOwnProperty("failure")) // Failure
+						{
+							alert(resp.failure);
+						}
+
+						else
+						{
+							alert("Successfully updated analytics info");
+						}
 					}
 				);
 			}

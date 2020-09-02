@@ -178,6 +178,55 @@
 						)
 					);
 				}
+			} // else if isset($_POST["url"])
+
+			else if (isset($_POST["service"])) // Need to update an analytics tag
+			{
+				if (isset($_POST["code"])) // Need new script code
+				{
+					$code = trim($_POST["code"]);
+					$updateSQL = "UPDATE analytics SET code=:code WHERE service=:service";
+					$stmt = $dbh->prepare($updateSQL);
+					$res = $stmt->execute(
+						array(
+							"code" => $code,
+							"service" => $_POST["service"]
+						)
+					);
+
+					if ($res) // Success
+					{
+						die(
+							json_encode(
+								array(
+									"success" => "updated code for service " . $_POST["service"]
+								)
+							)
+						);
+					}
+
+					else // Failure
+					{
+						die(
+							json_encode(
+								array(
+									"failure" => $uStmt->errorInfo()[0]
+								)
+							)
+						);
+					}
+				}
+
+				else // Error
+				{
+					die(
+						json_encode(
+							array(
+								"failure" => "noCode"
+							)
+						)
+					);
+				}
 			}
 		} // if (isset($_POST))
 	} // try
@@ -259,16 +308,62 @@
 							<td>
 								<input type=\"text\" value=\"" . $row["title"] . "\" data-url=\"". $row["url"] . "\" />
 								<br />
-								<button data-url=\"". $row["url"] . "\" data-for=\"title\">Update</button>
+								<button data-url=\"". $row["url"] . "\" data-for=\"title\" class=\"pageInfo\">Update</button>
 							</td>
 							<td>
 								<input type=\"text\" value=\"" . $row["description"] . "\" data-url=\"" . $row["url"] . "\" />
 								<br />
-								<button data-url=\"". $row["url"] . "\" data-for=\"description\">Update</button>
+								<button data-url=\"". $row["url"] . "\" data-for=\"description\" class=\"pageInfo\">Update</button>
 							</td>";
 					}
 				?>
 			</table>
+		</section>
+		<hr />
+		<section>
+			<h1>
+				Google Analytics Tag
+			</h1>
+			<label for="ga-analytics-code">
+				Enter your Google Analytics code here to have it display across all pages&#58;
+			</label>
+			<textarea data-for="ga">
+			<?php
+				$getGACodeSQL = "SELECT code FROM analytics WHERE service='Google Analytics'";
+				$getGACodeStmt = $dbh->query($getGACodeSQL);
+
+				foreach ($getGACodeStmt->fetchAll() as $row)
+				{
+					echo $row["code"];
+				}
+			?>
+			</textarea>
+			<button class="updateAnalytics" id="ga">
+				Update
+			</button>
+		</section>
+		<hr />
+		<section>
+			<h1>
+				Facebook Pixel Code
+			</h1>
+			<label for="fb-pixel-code">
+				Enter your Facebook Pixel code here to have it display across all pages&#58;
+			</label>
+			<textarea data-for="fb">
+			<?php
+				$getGACodeSQL = "SELECT code FROM analytics WHERE service='Facebook Pixel'";
+				$getGACodeStmt = $dbh->query($getGACodeSQL);
+
+				foreach ($getGACodeStmt->fetchAll() as $row)
+				{
+					echo $row["code"];
+				}
+			?>
+			</textarea>
+			<button class="updateAnalytics" id="fb">
+				Update
+			</button>
 		</section>
 	</body>
 </html>

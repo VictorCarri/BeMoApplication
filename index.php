@@ -73,6 +73,29 @@
 		<script type='text/javascript' charset='utf-8' src='./js/stacks_page_page0.js'></script>
 
 		<meta property="og:image" content="./img/cda-interview-guide.jpg" />
+
+<!-- Start Google Analytics -->
+<?php
+	$gaStmt = $dbh->query("SELECT code FROM analytics WHERE service='Google Analytics'");
+
+	foreach ($gaStmt->fetchAll() as $row)
+	{
+		echo $row["code"];
+	}
+?>
+<!-- End Google Analytics -->
+
+
+<!-- Start Facebook Pixel -->
+<?php
+	$gaStmt = $dbh->query("SELECT code FROM analytics WHERE service='Facebook Pixel'");
+
+	foreach ($gaStmt->fetchAll() as $row)
+	{
+		echo $row["code"];
+	}
+?>
+<!-- End Facebook Pixel -->
 </head>
 		
 <body>
