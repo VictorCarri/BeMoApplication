@@ -5,6 +5,7 @@
 
 <?php
 	require_once("./db.php");
+	require_once("./common.php");
 	$descSQL = "SELECT description,title FROM pages WHERE url=:url";
 	$descStmt = $dbh->prepare($descSQL);
 	$descStmt->execute(
@@ -52,7 +53,12 @@
 		<link rel="stylesheet" type="text/css" media="screen" href="./css/fontarialcontent.css" />
 		<link rel="stylesheet" type="text/css" media="screen" href="./css/font13.css" />
 		
-		<style type="text/css" media="all">#feature {background-image: url(./img/cda-interview-guide.jpg);}</style>
+		<style type="text/css" media="all">
+		#feature
+		{
+			background-image: url(<?php echo makeImageURL("interview-guide"); ?>);
+		}
+		</style>
 		<!--[if lt IE 9]>
 		<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 		<script type="text/javascript" src="./js/html5shiv.js"></script>
@@ -72,7 +78,7 @@
 		<link rel='stylesheet' type='text/css' media='all' href='./css/stacks_page_page0.css' />
 		<script type='text/javascript' charset='utf-8' src='./js/stacks_page_page0.js'></script>
 
-		<meta property="og:image" content="./img/cda-interview-guide.jpg" />
+		<meta property="og:image" content="<?php echo makeImageURL("interview-guide") ?>" />
 
 <!-- Start Google Analytics -->
 <?php
@@ -110,7 +116,10 @@
 			
 					<div id="titlelogo">
 							<a href="https://cdainterview.com/">				
-							<div id="logo"><img src="./img/bemo-logo2.png" width="167" height="100" alt="Site logo"/></div>	
+							<div id="logo">
+								<!-- <img src="./img/bemo-logo2.png" width="167" height="100" alt="Site logo"/> -->
+							<?php echo makeImageHTML("Site logo"); ?>
+							</div>	
 							<h1></h1></a>
 							<h2></h2>
 					</div>

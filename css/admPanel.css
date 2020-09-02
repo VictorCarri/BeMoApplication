@@ -1,7 +1,7 @@
-table
+/*table
 {
 	border-style: solid;
-	border-width: 0.5;
+	border-width: 0;
 	border-color: #000000;
 }
 
@@ -10,7 +10,7 @@ td, th
 	border-style: solid;
 	border-width: 0.05;
 	border-color: #C7BBBE;
-}
+}*/
 
 td:not(:first)
 {

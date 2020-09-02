@@ -1,0 +1,10 @@
+array (
+  'file' => 
+  array (
+    'name' => 'bemo-logo2.png',
+    'type' => 'image/png',
+    'tmp_name' => '/tmp/phpje9aVP',
+    'error' => 0,
+    'size' => 110379,
+  ),
+)

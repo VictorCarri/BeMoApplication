@@ -4,6 +4,7 @@
 <!--[if (gt IE 9)|!(IE)]><!--><html lang="en"><!--<![endif]-->
 <?php
 	require_once("./db.php"); // DB setup
+	require_once("./common.php"); // Common functions
 	$getIsIndexableSQL = "SELECT indexable FROM pages WHERE url=:url";
 	$isIndexableStmt = $dbh->prepare($getIsIndexableSQL);
 	$isIndexableStmt->execute(array(":url" => basename($_SERVER["SCRIPT_FILENAME"])));
@@ -114,7 +115,11 @@
 					<div id="titlelogo">
 						<a href="./index.php">
 						<div id="logo">
-							<img src="./img/bemo-logo2.png" width="167" height="100" alt="Site logo"/></div>	
+							<?php
+								echo makeImageHTML("Site logo"); // ID 1 is our logo
+								file_put_contents("imageHTML", makeImageHTML("Site logo"));
+							?>
+						</div>	
 							<h1></h1></a>
 							<h2></h2>
 					</div>

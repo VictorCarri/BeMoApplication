@@ -2,6 +2,7 @@
 	try
 	{
 		require_once("../db.php");
+		require_once("../common.php");
 		$getAdmEmailSQL = "SELECT email FROM users WHERE username='admin'";
 		$getAdmEmStmt = $dbh->prepare($getAdmEmailSQL);
 		$getAdmEmStmt->execute();
@@ -13,6 +14,8 @@
 
 		if (isset($_POST)) // There is POST data
 		{
+			file_put_contents("post", var_export($_POST, true));
+
 			if (isset($_POST["email"])) // Request to change admin email
 			{
 				$email = htmlentities(strip_tags(trim($_POST["email"])));
@@ -227,6 +230,144 @@
 						)
 					);
 				}
+			} // else if (isset($_POST["service"]))
+
+			else if (isset($_POST["replaceImg"])) // Replace a site image
+			{
+				$targDir = "../img"; // Common images dir.
+				file_put_contents("files", var_export($_FILES, true));
+				$relTarget = $targDir . "/" . htmlentities(strip_tags(trim(basename($_FILES["file"]["name"]))));
+				file_put_contents("relTarget", var_export($relTarget, true));
+				$imgType = $_FILES["file"]["type"];
+				file_put_contents("imgType", var_export($imgType, true));
+				$acceptedTypes = array("image/png", "image/jpeg", "image/gif");
+
+				if (mime_content_type($_FILES["file"]["tmp_name"]) === $imgType) // The type the browser sent is the actual type (security check)
+				{
+					if (in_array($imgType, $acceptedTypes)) // Acceptable file
+					{
+						if (!file_exists($absTarget)) // File wasn't already uploaded
+						{
+							$maxSizeInGB = 1;
+							$maxSizeInBytes = $maxSizeInGB * pow(1024, 3); // Convert GB to bytes for comparison
+							file_put_contents("maxSizeInBytes", var_export($maxSizeInBytes, true));
+
+							if ($_FILES["file"]["size"] <= $maxSizeInBytes) // The image is small enough
+							{
+								if ($_FILES["file"]["error"] === UPLOAD_ERR_OK) // No other error occurred
+								{
+									if (move_uploaded_file($_FILES["file"]["tmp_name"], $relTarget)) // Successfully transferred the file to the images directory
+									{
+										$updateSQL = "UPDATE images SET path=:path WHERE purpose=:purpose"; // SQL to use to change the image's path
+										$stmt = $dbh->prepare($updateSQL);
+										$pathToStore = basename($relTarget);
+										$purposeToStore = str_replace("-", " ", htmlentities(strip_tags(trim($_POST["purpose"]))));
+										$res = $stmt->execute(
+											array(
+												"path" => $pathToStore, // We only need the file's name
+												"purpose" => $purposeToStore
+											)
+										);
+										file_put_contents("query", "UPDATE images SET path='" . $pathToStore ."' WHERE purpose='" . $purposeToStore ."'");
+
+										if ($res) // Successfully updated DB
+										{
+											die(
+												json_encode(
+													array(
+														"success" => $relTarget
+													)
+												)
+											);
+										}
+
+										else // Failed to update DB
+										{
+											die(
+												json_encode(
+													array(
+														"failure" => "dbUpdateFailed"
+													)
+												)
+											);
+										}
+									}
+		
+									else // Couldn't move the file
+									{
+										die(
+											json_encode(
+												array(
+													"failure" => "moveFailed"
+												)
+											)
+										);
+									}
+								}
+	
+								else // Some other error occurred
+								{
+									die(
+										json_encode(
+											array(
+												"failure" => "unknown"
+											)
+										)
+									);
+								}
+							}
+	
+							else // Too big
+							{
+								die(
+									json_encode(
+										array(
+											"failure" => "tooBig"
+										)
+									)
+								);
+							}
+						}
+	
+						else // File was already uploaded
+						{
+							die(
+								json_encode(
+									array(
+										"failure" => "alreadyExists"
+									)
+								)
+							);
+						}
+					}
+	
+					else
+					{
+						die(
+							json_encode(
+								array(
+									"failure" => "invalidImgType"
+								)
+							)
+						);
+					}
+				} // if (mime_content_type(...
+	
+				else // Mismatched types - malicious request
+				{
+					die(
+						json_encode(
+							array(
+								"failure" => "MIMEmismatch"
+							)
+						)
+					);
+				}
+			}
+
+			else
+			{
+				file_put_contents("admPost", var_export($_POST, true));
 			}
 		} // if (isset($_POST))
 	} // try
@@ -264,7 +405,7 @@
 					</th>
 				</tr>
 			<?php
-				$getPagesSQL = "SELECT * FROM pages"; // We just want to loop through them
+				$getPagesSQL = "SELECT url,indexable FROM pages"; // We just want to loop through them
 				$getPagesStmt = $dbh->prepare($getPagesSQL);
 				$getPagesStmt->execute();
 
@@ -364,6 +505,39 @@
 			<button class="updateAnalytics" id="fb">
 				Update
 			</button>
+		</section>
+		<hr />
+		<section>
+			<h1>
+				Change Images
+			</h1>
+			<table>
+				<tr>
+					<th>
+						Purpose
+					</th>
+					<th>
+						Image
+					</th>
+				</tr>
+				<?php
+					$getImgsSQL = "SELECT purpose FROM images";
+					$getImgsStmt = $dbh->query($getImgsSQL);
+					
+					foreach ($getImgsStmt->fetchAll() as $row)
+					{
+						echo "<tr><td>". $row["purpose"] ."</td><td><img src=\"". makeImageURL($row["purpose"], "../")  ."\" height=\"100\" width=\"200\" data-purpose=\"". str_replace(" ", "-", $row["purpose"]) . "\" />
+						<br />
+						<form data-purpose=\"". str_replace(" ", "-", $row["purpose"]) . "\" enctype=\"multipart/form-data\">
+							<input type=\"file\" id=\"" . str_replace(" ", "-", $row["purpose"]) . "\" accept=\".png,.jpg,.gif\" />
+							<button data-purpose=\"". str_replace(" ", "-", $row["purpose"]) . "\" class=\"imgButton\">
+						</form>
+						Replace image.
+						</button>
+						</td></tr>";
+					}
+				?>
+			</table>
 		</section>
 	</body>
 </html>

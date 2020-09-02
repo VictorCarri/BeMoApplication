@@ -27,19 +27,21 @@ $(document).ready(function(e)
 			}
 		);
 
-		$("input[type=checkbox]").click(function(e)
+		$("input:checkbox").click(function(e)
 			{
-				e.preventDefault();
-				console.log(this.checked);
-				//alert(this.checked);
+				//e.preventDefault();
+				const isChecked = $(this).prop("checked");
+				console.log(isChecked);
+				//alert(isChecked);
 				pageURL = $(this).attr("id");
 				$.post("./index.php",
 					{
-						indexable: this.checked,
+						indexable: isChecked,
 						pageURL: pageURL
 					},
 					function(resp)
 					{
+						resp = JSON.parse(resp);
 						console.log(resp);
 						//alert(resp);
 						
@@ -51,6 +53,8 @@ $(document).ready(function(e)
 						else if (resp.hasOwnProperty("success")) // The operation succeeded
 						{
 							alert("Successfuly changed page " + pageURL + "'s indexable status.");
+							//$("#" + pageURL).prop("checked", !isChecked);
+							//this.checked = !this.checked;
 						}
 					}
 				);
@@ -107,6 +111,7 @@ $(document).ready(function(e)
 					function(resp)
 					{
 						console.log(resp);
+						resp = JSON.parse(resp);
 
 						if (resp.hasOwnProperty("failure")) // Failure
 						{
@@ -119,6 +124,54 @@ $(document).ready(function(e)
 						}
 					}
 				);
+			}
+		);
+
+		$(".imgButton").click(function(e)
+			{
+				e.preventDefault();
+				const purpose = $(this).attr("data-purpose");
+				console.log($("#" + purpose));
+
+				if ($("#" + purpose)[0].files.length === 0) // No file
+				{
+					alert("You haven't uploaded any files.");
+				}
+
+				else
+				{
+					alert("Uploading file...");
+					const fileData = $("#" + purpose).prop("files")[0];
+					console.log(fileData);
+					var formData = new FormData();
+					formData.append("file", fileData);
+					formData.append("purpose", purpose);
+					formData.append("replaceImg", true);
+					$.ajax("./index.php", {
+							type: "POST",
+							data: formData,
+							cache: false,
+							contentType: false,
+							processData: false,
+							success: function(data, status, xhr)
+							{
+								const parsedData = JSON.parse(data);
+								console.log("%o, %o,  %o", parsedData, status, xhr);
+								
+								if (parsedData.hasOwnProperty("success"))
+								{
+									alert("Successfully changed image");
+									$("img[data-purpose=\"" + purpose + "\"]").attr("src", parsedData.success);
+								}
+
+								else
+								{
+									alert("Failed to change image: " + parsedData.failure);
+								}
+							}
+						}
+					);
+				}
 			}
 		);
 	}

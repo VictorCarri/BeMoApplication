@@ -1,0 +1,1 @@
+UPDATE images SET path='bemo-logo2.png' WHERE purpose='Site logo'
