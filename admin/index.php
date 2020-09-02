@@ -94,8 +94,93 @@
 					);
 				}
 			}
-		}
-	}
+
+			else if (isset($_POST["url"])) // Request to change a page
+			{
+				if (isset($_POST["type"]) && isset($_POST["content"]))
+				{
+					if ($_POST["type"] === "description") // Updating a page's description
+					{
+						$usql = "UPDATE pages SET description=:content WHERE url=:url"; // Statement to update page info
+						$uStmt = $dbh->prepare($usql);
+						$execRes = $uStmt->execute(
+							array(
+								"content" => htmlentities(strip_tags(trim($_POST["content"]))),
+								"url" => strip_tags(trim($_POST["url"]))
+							)
+						);
+					
+						if ($execRes)
+						{
+							die(
+								json_encode(
+									array(
+										"success" => "Updated description"
+									)
+								)
+							);
+						}
+
+						else
+						{
+							die(
+								json_encode(
+									array(
+										"failure" => $uStmt->errorInfo()[0]
+									)
+								)
+							);
+						}
+					}
+
+					else // Updating a page's title
+					{
+						$usql = "UPDATE pages SET title=:content WHERE url=:url"; // Statement to update page info
+						$uStmt = $dbh->prepare($usql);
+						$execRes = $uStmt->execute(
+							array(
+								"content" => htmlentities(strip_tags(trim($_POST["content"]))),
+								"url" => strip_tags(trim($_POST["url"]))
+							)
+						);
+					
+						if ($execRes)
+						{
+							die(
+								json_encode(
+									array(
+										"success" => "Updated title"
+									)
+								)
+							);
+						}
+
+						else
+						{
+							die(
+								json_encode(
+									array(
+										"failure" => $uStmt->errorInfo()[0]
+									)
+								)
+							);
+						}
+					}
+				}
+
+				else
+				{
+					die(
+						json_encode(
+							array(
+								"failure" => "Missing data"
+							)
+						)
+					);
+				}
+			}
+		} // if (isset($_POST))
+	} // try
 
 	catch (PDOException $e)
 	{
@@ -121,14 +206,14 @@
 		<section id="indexable-pages">
 			<h1>Set Page Indexability</h1>
 			<table>
-			<tr>
-				<th>
-					URL
-				</th>
-				<th>
-					Is this page indexable by search engines?
-				</th>
-			</tr>
+				<tr>
+					<th>
+						URL
+					</th>
+					<th>
+						Is this page indexable by search engines?
+					</th>
+				</tr>
 			<?php
 				$getPagesSQL = "SELECT * FROM pages"; // We just want to loop through them
 				$getPagesStmt = $dbh->prepare($getPagesSQL);
@@ -150,6 +235,40 @@
 		</section>
 		<hr />
 		<section>
+			<h1>Set Page Titles and Descriptions</h1>
+			<table>
+				<tr>
+					<th>
+						Page
+					</th>
+					<th>
+						Title
+					</th>
+					<th>
+						Description
+					</th>
+				</tr>
+				<?php
+					$getPageInfoSQL = "SELECT url,description,title FROM pages";
+					$getPageInfoStmt = $dbh->query($getPageInfoSQL);
+
+					foreach ($getPageInfoStmt->fetchAll() as $row)
+					{
+						echo "<tr>
+							<td>" . $row["url"] . "</td>
+							<td>
+								<input type=\"text\" value=\"" . $row["title"] . "\" data-url=\"". $row["url"] . "\" />
+								<br />
+								<button data-url=\"". $row["url"] . "\" data-for=\"title\">Update</button>
+							</td>
+							<td>
+								<input type=\"text\" value=\"" . $row["description"] . "\" data-url=\"" . $row["url"] . "\" />
+								<br />
+								<button data-url=\"". $row["url"] . "\" data-for=\"description\">Update</button>
+							</td>";
+					}
+				?>
+			</table>
 		</section>
 	</body>
 </html>

@@ -9,5 +9,15 @@ td, th
 {
 	border-style: solid;
 	border-width: 0.05;
-	border-color: #C7BBBE
+	border-color: #C7BBBE;
+}
+
+td:not(:first)
+{
+	width: 100%;
+}
+
+input
+{
+	width: 100%;
 }
