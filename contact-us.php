@@ -2,6 +2,17 @@
 <!--[if IE 8 ]><html lang="en" class="ie8"><![endif]-->
 <!--[if IE 9 ]><html lang="en" class="ie9"><![endif]-->
 <!--[if (gt IE 9)|!(IE)]><!--><html lang="en"><!--<![endif]-->
+<?php
+	require_once("./db.php"); // DB setup
+	$getIsIndexableSQL = "SELECT indexable FROM pages WHERE url=:url";
+	$isIndexableStmt = $dbh->prepare($getIsIndexableSQL);
+	$isIndexableStmt->execute(array("url" => basename($_SERVER["SCRIPT_FILENAME"])));
+
+	foreach ($isIndexableStmt->fetchAll() as $row)
+	{
+		$isIndexable = boolval($row["indexable"]);
+	}
+?>
 	
 	<head>
 	<meta name="viewport" content="initial-scale=1 maximum-scale=1"/>
@@ -51,7 +62,12 @@
 		
 		
 		<head>
-<meta name="robots" content="noindex" />
+			<?php
+				if (!$isIndexable) // Allows admin to control it
+				{
+					echo "<meta name=\"robots\" content=\"noindex\" />";
+				}
+			?>
 <noscript><img height="1" width="1" alt="" style="display:none" src="https://www.facebook.com/tr?id=235586069975455&amp;ev=NoScript" /></noscript><!-- End Google Analytics -->
 </head>
 		
@@ -159,7 +175,7 @@
 </form>
 
 <br />
-<div class="form-footer"><span style="font-size:15px; font-weight:bold; "><u>Note</u></span><span style="font-size:15px; ">: If you are having difficulties with our contact us form above, send us an email to <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="573e3931381735323a3836343633323a3e3434383924223b233e39307934383a">[email&#160;protected]</a> (copy & paste the email address)</span><span style="font-size:13px; "><br /></span></div><br />
+<div class="form-footer"><span style="font-size:15px; font-weight:bold; "><u>Note</u></span><span style="font-size:15px; ">: If you are having difficulties with our contact us form above, send us an email to <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="573e3931381735323a3836343633323a3e3434383924223b233e39307934383a">[email&#160;protected]</a> (copy &amp; paste the email address)</span><span style="font-size:13px; "><br /></span></div><br />
 
 </div>
 								

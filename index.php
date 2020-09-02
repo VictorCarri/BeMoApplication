@@ -2,6 +2,9 @@
 <!--[if IE 8 ]><html lang="en" class="ie8"><![endif]-->
 <!--[if IE 9 ]><html lang="en" class="ie9"><![endif]-->
 <!--[if (gt IE 9)|!(IE)]><!--><html lang="en"><!--<![endif]-->
+
+<?php
+?>
 	
 	<head><meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<meta name="online" content="true">

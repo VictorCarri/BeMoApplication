@@ -1,9 +1,10 @@
 <?php
 	try
 	{
-		$user = "bemoappuser";
+		/*$user = "bemoappuser";
 		$pass = "bemoapplogin";
-		$dbh = new PDO("mysql:host=localhost;dbname=bemoapp", $user, $pass);
+		$dbh = new PDO("mysql:host=localhost;dbname=bemoapp", $user, $pass);*/
+		require_once("./db.php");
 		$getAdmEmailSQL = "SELECT email FROM users WHERE username='admin'";
 		$getAdmEmStmt = $dbh->prepare($getAdmEmailSQL);
 		$getAdmEmStmt->execute();
