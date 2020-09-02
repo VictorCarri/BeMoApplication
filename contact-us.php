@@ -6,19 +6,34 @@
 	require_once("./db.php"); // DB setup
 	$getIsIndexableSQL = "SELECT indexable FROM pages WHERE url=:url";
 	$isIndexableStmt = $dbh->prepare($getIsIndexableSQL);
-	$isIndexableStmt->execute(array("url" => basename($_SERVER["SCRIPT_FILENAME"])));
+	$isIndexableStmt->execute(array(":url" => basename($_SERVER["SCRIPT_FILENAME"])));
 
 	foreach ($isIndexableStmt->fetchAll() as $row)
 	{
 		$isIndexable = boolval($row["indexable"]);
+	}
+
+	$pageInfoSQL = "SELECT description,title FROM pages WHERE url=:url";
+	$pageInfoStmt = $dbh->prepare($pageInfoSQL);
+	$pageInfoStmt->execute(
+		array(
+			":url" => basename($_SERVER["SCRIPT_FILENAME"])
+		)
+	);
+
+	foreach ($pageInfoStmt->fetchAll() as $row)
+	{
+		$desc = $row["description"];
+		$title = $row["title"];
 	}
 ?>
 	
 	<head>
 	<meta name="viewport" content="initial-scale=1 maximum-scale=1"/>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		
-		<title>Contact Us</title>
+		<meta name="description" content="<?php echo $desc; ?>" />
+		<!-- <title>Contact Us</title> -->
+		<title><?php echo $title; ?></title>
 		<link rel="stylesheet" type="text/css" media="screen" href="./css/styles.css"  />
 		<link rel="stylesheet" type="text/css" media="screen" href="./css/colourtag-page3.css"  />
 		<link rel="stylesheet" type="text/css" media="screen" href="./css/flexslider.css"  />

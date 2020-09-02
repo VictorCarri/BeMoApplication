@@ -148,5 +148,8 @@
 			?>
 			</table>
 		</section>
+		<hr />
+		<section>
+		</section>
 	</body>
 </html>

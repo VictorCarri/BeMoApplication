@@ -4,6 +4,20 @@
 <!--[if (gt IE 9)|!(IE)]><!--><html lang="en"><!--<![endif]-->
 
 <?php
+	require_once("./db.php");
+	$descSQL = "SELECT description,title FROM pages WHERE url=:url";
+	$descStmt = $dbh->prepare($descSQL);
+	$descStmt->execute(
+		array(
+			":url" => basename($_SERVER["SCRIPT_FILENAME"])
+		)
+	);
+
+	foreach ($descStmt->fetchAll() as $row)
+	{
+		$description = $row["description"];
+		$title = $row["title"];
+	}
 ?>
 	
 	<head><meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -11,9 +25,11 @@
 	<meta name="viewport" content="initial-scale=1 maximum-scale=1"/>
 	<meta name="robots" content="noindex" />
 		
-		<meta name="description" content="FREE Ultimate Guide to CDA Interviews: Tips & Proven Strategies to Help You Prepare & Ace Your CDA Structured Interview. " />
+		<!-- <meta name="description" content="FREE Ultimate Guide to CDA Interviews: Tips & Proven Strategies to Help You Prepare & Ace Your CDA Structured Interview. " /> -->
+		<meta name="description" content="<?php echo $description ?>" />
 		
-		<title>FREE Ultimate Guide to CDA Interviews: Tips & Proven Strategies to Help You Prepare & Ace Your CDA Structured Interview. </title>
+		<!-- <title>FREE Ultimate Guide to CDA Interviews: Tips & Proven Strategies to Help You Prepare & Ace Your CDA Structured Interview. </title> -->
+		<title><?php echo $title ?></title>
 		<link rel="stylesheet" type="text/css" media="screen" href="./css/styles.css"  />
 		<link rel="stylesheet" type="text/css" media="screen" href="./css/colourtag-page0.css"  />
 		<link rel="stylesheet" type="text/css" media="screen" href="./css/flexslider.css"  />
