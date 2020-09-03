@@ -4,8 +4,11 @@
 <!--[if (gt IE 9)|!(IE)]><!--><html lang="en"><!--<![endif]-->
 
 <?php
+	echo "Starting";
 	require_once("./db.php");
+	echo "Included db.php";
 	require_once("./common.php");
+	echo "Included common.php";
 	session_start();
 	unset($_SESSION);
 	session_destroy();

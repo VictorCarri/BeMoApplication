@@ -1,6 +1,6 @@
 <?php
 	require_once("../db.php");
-	require_once("../common.php");
+
 	session_start();	
 	file_put_contents("index.log", "\$_SESSION is " . var_export($_SESSION, true), FILE_APPEND);
 
@@ -8,14 +8,6 @@
 	{
 		if ($_SESSION["perm"] === '0') // The user is an administrator
 		{
-			$getAdmEmQ = "SELECT email FROM users WHERE username='admin'";
-			$getAdmEmStmt = $dbh->prepare($getAdmEmQ);
-			$getAdmEmStmt->execute();
-			
-			foreach ($getAdmEmStmt->fetchAll() as $row)
-			{
-				$admEmail = $row["email"];
-			}
 ?>
 		<!DOCTYPE html>
 		<html>
