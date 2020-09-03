@@ -3,7 +3,7 @@ $(document).ready(function(e)
 		$("#setEmail").click(function(e)
 			{
 				e.preventDefault();
-				$.post("./index.php",
+				$.post("./admHandler.php",
 					{
 						email: $("#admEmInp").val()
 					},
@@ -34,7 +34,7 @@ $(document).ready(function(e)
 				console.log(isChecked);
 				//alert(isChecked);
 				pageURL = $(this).attr("id");
-				$.post("./index.php",
+				$.post("./admHandler.php",
 					{
 						indexable: isChecked,
 						pageURL: pageURL
@@ -70,7 +70,7 @@ $(document).ready(function(e)
 				const msg = "Click on button for " + type + " of page " + url + ", with new content \"" + newContent + "\"";
 				console.log(msg);
 				//alert(msg);
-				$.post("./index.php",
+				$.post("./admHandler.php",
 					{
 						url: url,
 						type: type,
@@ -103,7 +103,7 @@ $(document).ready(function(e)
 				const service = services[$(this).attr("id")];
 				console.log("Selected service: %s", service);
 				$.post(
-					"./index.php",
+					"./admHandler.php",
 					{
 						service: service,
 						code: $("textarea[data-for=\"" + $(this).attr("id") + "\"]").val()
@@ -147,7 +147,7 @@ $(document).ready(function(e)
 					formData.append("file", fileData);
 					formData.append("purpose", purpose);
 					formData.append("replaceImg", true);
-					$.ajax("./index.php", {
+					$.ajax("./admHandler.php", {
 							type: "POST",
 							data: formData,
 							cache: false,
