@@ -64,6 +64,9 @@
 		</title>
 	</head>
 	<body>
+		<h1>
+			Administrator Login
+		</h1>
 		<form action="login.php" method="POST">
 			<label for="username">
 				Username&#58;

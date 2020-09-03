@@ -6,6 +6,9 @@
 <?php
 	require_once("./db.php");
 	require_once("./common.php");
+	session_start();
+	unset($_SESSION);
+	session_destroy();
 	$descSQL = "SELECT description,title FROM pages WHERE url=:url";
 	$descStmt = $dbh->prepare($descSQL);
 	$descStmt->execute(
