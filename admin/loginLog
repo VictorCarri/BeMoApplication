@@ -7,12 +7,12 @@ array (
 Username: admin
 Password: admin
 Hashed password: $2y$10$2PttjHxo/FgaCvDlEiLv4u9bf5hDZR.S11rCJMP8KTA/ezbHIWWea
-Email: vcarri1000@gmail.com
+Email: admin@admin.com
 Perm level: 0
 Passwords matched
 SESSION variable:
 array (
   'user' => 'admin',
-  'email' => 'vcarri1000@gmail.com',
+  'email' => 'admin@admin.com',
   'perm' => '0',
 )

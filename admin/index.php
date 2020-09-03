@@ -203,7 +203,7 @@
 	<body>
 		You are logged in, but aren&apos;t an administrator.
 		<br />
-		Please <a href="../index.php">click here</a> to logout and return to the home page.
+		Please <a href="./logout.php">click here</a> to logout and return to the home page.
 	</body>
 </html>
 <?php
