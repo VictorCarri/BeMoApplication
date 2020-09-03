@@ -1,0 +1,18 @@
+
+Post variable is set
+array (
+  'username' => 'user',
+  'password' => 'user',
+)
+Username: user
+Password: user
+Hashed password: $2y$10$FLIeMOntjdWRt9IohgOVjeh9T46TVNwRps/pO/hz4I7li0gq.Ttse
+Email: user@example.com
+Perm level: 1
+Passwords matched
+SESSION variable:
+array (
+  'user' => 'user',
+  'email' => 'user@example.com',
+  'perm' => '1',
+)
